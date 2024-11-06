@@ -9,7 +9,7 @@ The parser fetches JSON data through a web request to the NASA NeoWs API, proces
 ### Applications
 The NeoWs Asteroid Data Parser has several valuable applications, including:
 
--Risk Assessment and Tracking: By identifying potentially hazardous asteroids, this data supports risk assessment initiatives and ongoing monitoring of objects that pose a potential threat to Earth.
--Research and Simulation Models: The organized data can be used to build models for simulating asteroid trajectories, helping scientists study near-Earth object behavior over time.
--Data Visualization: The structured data can be visualized on interactive charts and maps, illustrating asteroid approaches to Earth and trends in NEO occurrences.
--Public Awareness and Education: The parser can be integrated into educational tools, providing accessible information on asteroids and raising public awareness about space safety and NEO monitoring.
+- Risk Assessment and Tracking: By identifying potentially hazardous asteroids, this data supports risk assessment initiatives and ongoing monitoring of objects that pose a potential threat to Earth.
+- Research and Simulation Models: The organized data can be used to build models for simulating asteroid trajectories, helping scientists study near-Earth object behavior over time.
+- Data Visualization: The structured data can be visualized on interactive charts and maps, illustrating asteroid approaches to Earth and trends in NEO occurrences.
+- Public Awareness and Education: The parser can be integrated into educational tools, providing accessible information on asteroids and raising public awareness about space safety and NEO monitoring.

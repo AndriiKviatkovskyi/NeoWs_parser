@@ -1,0 +1,85 @@
+json = _{ "{" ~ (pair ~ ("," ~ pair)*)? ~ "}" }
+pair = _{ key ~ ":" ~ value }
+array = _{ "[" ~ (value ~ ("," ~ value)*)? ~ "]" }
+value = _{ string | number_string | json | array | boolean | "null" }
+key = @{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+string = _{ "\"" ~ inner_string ~ "\"" }
+inner_string = @{ (!"\"" ~ ANY)* }
+number_string = _{ "\"" ~ number ~ "\"" }
+number = @{ "-"? ~ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+boolean = _{ "true" | "false" }
+
+near_earth_objects = _{ "\"near_earth_objects\"" ~ ":" ~ object_group }
+object_group = _{ "{" ~ (date_entry ~ ("," ~ date_entry)*)? ~ "}" }
+date_entry = { date_string ~ ":" ~ object_array }
+
+object_array = _{ "[" ~ (object ~ ("," ~ object)*)? ~ "]" }
+object = _{ "{" ~ (object_field ~ ("," ~ object_field)*)? ~ "}" }
+object_field = _{ id | name | hazardous | estimated_diameter | close_approach_data }
+
+id = _{ "\"id\"" ~ ":" ~ string }
+name = _{ "\"name\"" ~ ":" ~ string }
+hazardous = _{ "\"is_potentially_hazardous_asteroid\"" ~ ":" ~ boolean }
+
+estimated_diameter = _{
+    "\"estimated_diameter\"" ~ ":" ~ "{" ~
+    kilometers ~ "," ~
+    meters ~ "," ~
+    miles ~ "," ~
+    feet ~
+    "}"
+}
+
+kilometers = _{ "\"kilometers\"" ~ ":" ~ diameter_range }
+meters = _{ "\"meters\"" ~ ":" ~ diameter_range }
+miles = _{ "\"miles\"" ~ ":" ~ diameter_range }
+feet = _{ "\"feet\"" ~ ":" ~ diameter_range }
+
+diameter_range = @{
+    "{" ~ estimated_diameter_min ~ "," ~ estimated_diameter_max ~ "}"
+}
+
+estimated_diameter_min = _{ "\"estimated_diameter_min\"" ~ ":" ~ number_string }
+estimated_diameter_max = _{ "\"estimated_diameter_max\"" ~ ":" ~ number_string }
+
+
+close_approach_data = @{
+    "\"close_approach_data\"" ~ ":" ~ "[" ~ close_approach ~ ("," ~ close_approach)* ~ "]"
+}
+close_approach = @{
+    "{" ~ close_approach_date ~ "," ~ close_approach_date_full ~ "," ~ relative_velocity ~ "," ~ miss_distance ~ "," ~ orbiting_body ~ "}"
+}
+
+close_approach_date = _{ "\"close_approach_date\"" ~ ":" ~ date_string }
+close_approach_date_full = _{ "\"close_approach_date_full\"" ~ ":" ~ date_full }
+relative_velocity = _{ "\"relative_velocity\"" ~ ":" ~ "{" ~ velocity_field ~ "}" }
+miss_distance = _{ "\"miss_distance\"" ~ ":" ~ "{" ~ distance_field ~ "}" }
+orbiting_body = _{ "\"orbiting_body\"" ~ ":" ~ string }
+
+date_string = _{ "\"" ~ inner_date_string ~ "\"" }
+inner_date_string = @{ ASCII_DIGIT{4} ~ "-" ~ ASCII_DIGIT{2} ~ "-" ~ ASCII_DIGIT{2} }
+
+date_full = _{ "\"" ~ inner_date_full ~ "\"" }
+inner_date_full = @{
+    ASCII_DIGIT{4} ~ "-" ~ month ~ "-" ~ ASCII_DIGIT{2} ~ " " ~ ASCII_DIGIT{2} ~ ":" ~ ASCII_DIGIT{2}
+}
+
+month = _{ "Jan" | "Feb" | "Mar" | "Apr" | "May" | "Jun" | "Jul" | "Aug" | "Sep" | "Oct" | "Nov" | "Dec" }
+
+
+velocity_field = @{
+    kilometers_per_second ~ "," ~ kilometers_per_hour ~ "," ~ miles_per_hour
+}
+
+kilometers_per_second = _{ "\"kilometers_per_second\"" ~ ":" ~ number_string }
+kilometers_per_hour = _{ "\"kilometers_per_hour\"" ~ ":" ~ number_string }
+miles_per_hour = _{ "\"miles_per_hour\"" ~ ":" ~ number_string }
+
+distance_field = @{
+    astronomical_distance ~ "," ~ lunar_distance ~ "," ~ kilometers_distance ~ "," ~ miles_distance
+}
+
+astronomical_distance = _{ "\"astronomical\"" ~ ":" ~ number_string }
+lunar_distance = _{ "\"lunar\"" ~ ":" ~ number_string }
+kilometers_distance = _{ "\"kilometers\"" ~ ":" ~ number_string }
+miles_distance = _{ "\"miles\"" ~ ":" ~ number_string }
